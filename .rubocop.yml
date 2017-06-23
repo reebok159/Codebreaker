@@ -1,0 +1,7 @@
+{
+    "ignore_match": {
+        "inc": [
+            "missing <!DOCTYPE> declaration",
+            "inserting (?:implicit <body>|missing 'title' element)"
+        ]
+}
