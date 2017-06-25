@@ -20,6 +20,7 @@ module Codebreaker
     end
 
     def make_guess(guess)
+      return "" if guess.size != 4
       return unless @playing
       @matches = ''
       get_matches(guess)

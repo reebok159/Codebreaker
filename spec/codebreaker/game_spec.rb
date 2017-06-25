@@ -4,12 +4,12 @@ require_relative '../../codebreaker_cases.rb'
 module Codebreaker
   RSpec.describe Game do
     let(:game) { Game.new }
+
+
+    describe '#start' do
     before do
       game.start
     end
-
-    describe '#start' do
-
 
       it 'generates secret code' do
         expect(game.instance_variable_get(:@secret_code)).not_to be_empty
@@ -23,14 +23,18 @@ module Codebreaker
       end
 
       it 'start attempts is 15' do
-        expect(game.instance_variable_get(:@attempts)).to eq(15)
+        expect(game.instance_variable_get(:@attempts)).to eq(10)
       end
     end
 
     describe '#make_guess' do
+      before do
+        game.start
+      end
+
       it 'must be 14 attempts after trying' do
         game.make_guess("4432")
-        expect(game.instance_variable_get(:@attempts)).to eq(14)
+        expect(game.instance_variable_get(:@attempts)).to eq(9)
       end
 
       it 'must return :lose' do
@@ -74,6 +78,11 @@ module Codebreaker
 
 
     describe '#other_methods' do
+
+      before do
+        game.start
+      end
+
       it 'test get_hint - must give correct hint' do
         game.instance_variable_set(:@secret_code, "3123")
         expect("3123".split('').find_index(game.get_hint)).not_to be_nil
@@ -86,6 +95,12 @@ module Codebreaker
         expect(game.get_used_attempts).to eq(2)
       end
 
+    end
+
+    describe '#make_guess 2' do
+      it 'must return nil if game isn\'t started' do
+        expect(game.make_guess("5541")).to eq(nil)
+      end
     end
 
   end
