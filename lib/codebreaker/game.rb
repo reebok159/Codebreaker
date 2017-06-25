@@ -1,22 +1,35 @@
 module Codebreaker
   class Game
-    TOTAL_ATTEMPTS = 15
-    attr_accessor :attempts, :matches
+    TOTAL_ATTEMPTS = 10
+    attr_accessor :attempts, :matches, :playing
 
     def initialize
       @secret_code = ''
+      @playing = false
     end
 
     def start
       @attempts = TOTAL_ATTEMPTS
       @secret_code = (1..4).to_a.map {rand(1...6)}.join
+      @playing = true
+    end
+
+    def end_game
+      @attempts = 0
+      @playing = false
     end
 
     def make_guess(guess)
+      return unless @playing
       @matches = ''
       get_matches(guess)
       @attempts -= 1
-      return :lose if attempts == 0 && @matches != '++++'
+      if attempts == 0 && @matches != '++++'
+        end_game
+        return :lose
+      end
+      end_game if @matches == '++++'
+
       @matches
     end
 
@@ -32,6 +45,11 @@ module Codebreaker
 
     def get_used_attempts
       TOTAL_ATTEMPTS - @attempts
+    end
+
+    def get_secret_code
+      return if @playing
+      @secret_code
     end
 
     private

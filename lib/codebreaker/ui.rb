@@ -66,8 +66,8 @@ module UserConsole
           break
         end
         if result == :lose
-          puts "You lose!! Secret code was #{@game.secret_code}"
-          save_result_to_file("#{@name} lost with code #{@game.secret_code}")
+          puts "You lose!! Secret code was #{@game.get_secret_code}"
+          save_result_to_file("#{@name} lost with code #{@game.get_secret_code}")
           break
         end
 
