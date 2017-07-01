@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../../codebreaker_cases.rb'
+require_relative './codebreaker_cases.rb'
 
 module Codebreaker
   RSpec.describe Game do

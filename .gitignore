@@ -7,6 +7,10 @@
 /pkg/
 /spec/reports/
 /tmp/
+/.travis.yml
+/.rubocop.yml
+/.take_tasks~
+/.gitignore
 
 # rspec failure tracking
 .rspec_status
