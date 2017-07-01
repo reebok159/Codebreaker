@@ -10,6 +10,7 @@
 /.travis.yml
 /.rubocop.yml
 /.take_tasks~
+/.results.txt
 
 # rspec failure tracking
 .rspec_status
