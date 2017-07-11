@@ -3,13 +3,13 @@ require_relative './codebreaker_cases.rb'
 
 module Codebreaker
   RSpec.describe Game do
-    let(:game) { Game.new }
+    subject(:game) { Game.new }
 
 
     describe '#start' do
-    before do
-      game.start
-    end
+      before do
+        game.start
+      end
 
       it 'generates secret code' do
         expect(game.instance_variable_get(:@secret_code)).not_to be_empty

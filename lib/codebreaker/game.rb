@@ -25,18 +25,16 @@ module Codebreaker
       @matches = ''
       get_matches(guess)
       @attempts -= 1
-      if attempts == 0 && @matches != '++++'
+      if attempts == 0 || @matches == '++++'
         end_game
-        return :lose
+        return :lose if @matches != '++++'
       end
-      end_game if @matches == '++++'
-
       @matches
     end
 
     def get_matches(guess)
+      return @matches = '++++' if guess == @secret_code
       cleared_guess = get_exact_matches(guess.split(''))
-      return unless cleared_guess.size
       get_include_matches(cleared_guess)
     end
 
@@ -62,15 +60,13 @@ module Codebreaker
     end
 
     def get_include_matches(guess)
-      secret_code = guess.map {|item| item[1] }
-      start_size = secret_code.size
-      code = guess.map {|item| item[0] }
-      code.each do |item|
-        if k = secret_code.find_index(item)
+      secret_code = guess.transpose[1]
+      guess.each do |item|
+        if k = secret_code.find_index(item[0])
           secret_code.delete_at(k)
         end
       end
-      @matches <<= '-' * (start_size - secret_code.size)
+      @matches << '-' * (guess.size - secret_code.size)
     end
 
   end

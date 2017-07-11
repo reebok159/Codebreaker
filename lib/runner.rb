@@ -1,3 +1,4 @@
 require_relative "./codebreaker.rb"
 
-UserConsole::UI.new
+ui = UserConsole::UI.new
+ui.show_ui

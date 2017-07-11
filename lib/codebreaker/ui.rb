@@ -1,19 +1,28 @@
 module UserConsole
   class UI
-    attr_accessor :name, :game
+    attr_accessor :name, :game, :file_path
+
 
     def initialize
+      @game = Codebreaker::Game.new
+      @file_path = "./results.txt"
+    end
+
+    def show_ui
+      ask_name
+      show_header
+      show_start_menu
+    end
+
+    def ask_name
       puts "Enter your name:"
       @name = "stranger"
       entered_name = gets.chomp
       @name = entered_name if entered_name.length > 0
       puts "Hello, #{name}"
-      @game = Codebreaker::Game.new
-      show_start_menu
     end
 
-
-    def show_start_menu
+    def show_header
       puts "=============================================="
       puts "=============================================="
       puts "================CODEBREAKER==================="
@@ -24,67 +33,84 @@ module UserConsole
       puts "2. Show results"
       puts "3. Exit"
       puts "=============================================="
+    end
 
-      action = gets.chomp
+    def show_start_menu(action = gets.chomp)
+      show_header
 
-      if action == "1"
+      case action
+      when "1"
         start_game
-        return
-      elsif action == "2"
+      when "2"
         show_last_results
-      elsif action == "3"
-         puts "Good bye!"
-         return
+      when "3"
+        bye
+      else
+        show_start_menu
       end
+      return
+    end
 
-      show_start_menu
+    def bye
+      puts "Good bye!"
+    end
+
+    def show_win
+      puts "You win!!"
+      save_result_to_file("#{@name} won with #{@game.get_used_attempts} attempts")
+    end
+
+    def show_lose
+      puts "You lose!! Secret code was #{@game.get_secret_code}"
+      save_result_to_file("#{@name} lost with code #{@game.get_secret_code}")
+    end
+
+    def show_result(result)
+      return show_win if result == '++++'
+      return show_lose if result == :lose
+      result = 'NO MATCHES' if result == ''
+      puts "----------"
+      puts "  Result: #{result}"
+      puts "  Attempts: #{@game.attempts}"
+    end
+
+    def rules
+      "You must enter 4-digit number, all digits must be from 1 to 6."
+    end
+
+    def get_guess
+      puts "- Enter your guess, /q to exit or /h to use hint:"
+      guess = gets.chomp
+      return guess
     end
 
     def start_game
-      puts "=============================================="
-      puts "You must enter 4-digit number, all digits must be from 1 to 6."
+      puts rules
       @game.start
-
       loop do
-        puts "- Enter your guess, /q to exit or /h to use hint:"
-        guess = gets.chomp
-
+        guess = get_guess
         return if guess == "/q"
         if guess == "/h"
-          show_hint
+          puts show_hint
           next
         end
         if guess.length != 4
           puts "try again"
           next
         end
-
         result = @game.make_guess(guess)
-        if result == '++++'
-          puts "You win !!"
-          save_result_to_file("#{@name} won with #{@game.get_used_attempts} attempts")
-          break
-        end
-        if result == :lose
-          puts "You lose!! Secret code was #{@game.get_secret_code}"
-          save_result_to_file("#{@name} lost with code #{@game.get_secret_code}")
-          break
-        end
-
-        result = 'NO MATCHES' if result == ''
-        puts "----------"
-        puts "  Result: #{result}"
-        puts "  Attempts: #{@game.attempts}"
+        show_result(result)
+        break if result == '++++' || result == :lose
       end
     end
 
     def show_hint
-      puts "Secret code contains digit #{@game.get_hint}"
+      "Secret code contains digit #{@game.get_hint}"
     end
 
     def show_last_results
       begin
-        file = File.open("./results.txt", 'r') { |file| puts file.read }
+        file = File.open(@file_path, 'r') { |file| puts file.read }
       rescue Exception => e
         puts "Couldn't show results"
       end
@@ -93,7 +119,7 @@ module UserConsole
 
     def save_result_to_file(line)
       begin
-        file = File.open("./results.txt", 'a') { |file| file.puts line+"\n" }
+        file = File.open(@file_path, 'a') { |file| file.puts line+"\n" }
       rescue Exception => e
         puts "Couldn't save results"
       end
