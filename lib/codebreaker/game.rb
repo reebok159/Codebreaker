@@ -10,7 +10,7 @@ module Codebreaker
 
     def start
       @attempts = TOTAL_ATTEMPTS
-      @secret_code = (1..4).to_a.map {rand(1...6)}.join
+      @secret_code = (1..4).to_a.map { rand(1...6) }.join
       @playing = true
     end
 
@@ -20,12 +20,12 @@ module Codebreaker
     end
 
     def make_guess(guess)
-      return "" if guess.size != 4
+      return '' if guess.size != 4
       return unless @playing
       @matches = ''
       get_matches(guess)
       @attempts -= 1
-      if attempts == 0 || @matches == '++++'
+      if attempts.zero? || @matches == '++++'
         end_game
         return :lose if @matches != '++++'
       end
@@ -54,7 +54,7 @@ module Codebreaker
     private
 
     def get_exact_matches(guess)
-      cleared_guess = guess.zip(@secret_code.split('')).select{ |item| item[0] != item[1] }
+      cleared_guess = guess.zip(@secret_code.split('')).select { |item| item[0] != item[1] }
       @matches = '+' * (4 - cleared_guess.size)
       cleared_guess
     end
@@ -67,6 +67,5 @@ module Codebreaker
       end
       @matches << '-' * (guess.size - secret_code.size)
     end
-
   end
 end

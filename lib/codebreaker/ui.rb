@@ -2,7 +2,6 @@ module UserConsole
   class UI
     attr_accessor :name, :game, :file_path
 
-
     def initialize
       @game = Codebreaker::Game.new
       @file_path = "./results.txt"
@@ -18,7 +17,7 @@ module UserConsole
       puts "Enter your name:"
       @name = "stranger"
       entered_name = gets.chomp
-      @name = entered_name if entered_name.length > 0
+      @name = entered_name if entered_name.!empty?
       puts "Hello, #{name}"
     end
 
@@ -48,7 +47,6 @@ module UserConsole
       else
         show_start_menu
       end
-      return
     end
 
     def bye
@@ -81,7 +79,7 @@ module UserConsole
     def get_guess
       puts "- Enter your guess, /q to exit or /h to use hint:"
       guess = gets.chomp
-      return guess
+      guess
     end
 
     def get_action(guess)
@@ -112,7 +110,7 @@ module UserConsole
 
     def game_over?(result)
       return true if result == '++++' or result == :lose
-      return false
+      false
     end
 
     def show_hint
