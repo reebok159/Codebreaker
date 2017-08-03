@@ -62,9 +62,8 @@ module Codebreaker
     def get_include_matches(guess)
       secret_code = guess.transpose[1]
       guess.each do |item|
-        if k = secret_code.find_index(item[0])
-          secret_code.delete_at(k)
-        end
+        next unless k = secret_code.find_index(item[0])
+        secret_code.delete_at(k)
       end
       @matches << '-' * (guess.size - secret_code.size)
     end

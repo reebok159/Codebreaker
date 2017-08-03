@@ -84,24 +84,35 @@ module UserConsole
       return guess
     end
 
+    def get_action(guess)
+      return "exit" if guess == "/q"
+      if guess == "/h" or guess.length != 4
+        if guess == "/h"
+          puts show_hint
+        else
+          puts "try again"
+        end
+        return "next"
+      end
+    end
+
     def start_game
       puts rules
       @game.start
       loop do
         guess = get_guess
-        return if guess == "/q"
-        if guess == "/h"
-          puts show_hint
-          next
-        end
-        if guess.length != 4
-          puts "try again"
-          next
-        end
+        action = get_action(guess)
+        return if action == "exit"
+        next if action == "next"
         result = @game.make_guess(guess)
         show_result(result)
-        break if result == '++++' || result == :lose
+        break if game_over?(result)
       end
+    end
+
+    def game_over?(result)
+      return true if result == '++++' or result == :lose
+      return false
     end
 
     def show_hint
