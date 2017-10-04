@@ -1,0 +1,16 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+/.travis.yml
+/.rubocop.yml
+/.rake_tasks~
+/.results.txt
+
+# rspec failure tracking
+.rspec_status
